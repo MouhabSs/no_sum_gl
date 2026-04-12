@@ -1,41 +1,69 @@
-### No Sum GL
+# No Sum GL
 
-General Ledger without entry summarization
+A Frappe/ERPNext application that provides a detailed General Ledger report without entry summarization.
 
-### Installation
+## The Problem
 
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+ERPNext's standard General Ledger report aggregates multiple entries of the same account from a single voucher into one summarized row. For example, if a Journal Entry has three separate debit lines for "Cash" (50,000 + 30,000 + 20,000), the standard GL report collapses them into a single row showing 100,000.
 
+This makes it impossible to audit individual line items as they were originally entered.
+
+## The Solution
+
+**No Sum GL** adds a new report — **GL Report View** — that queries the `GL Entry` table directly without any grouping or aggregation, displaying every line item exactly as it was posted.
+
+## Features
+
+- Individual GL line items without summarization
+- Filters for Company, Date Range, Account, Voucher No, Cost Center, Party Type, and Party
+- Optional Remarks column via "Show Remarks" checkbox
+- Accounting Dimensions support
+- Finance Book filtering
+- Compatible with ERPNext v15
+
+## Requirements
+
+| Requirement | Version |
+|---|---|
+| Frappe Framework | v15.x |
+| ERPNext | v15.x |
+| Python | 3.10+ |
+| MariaDB | 10.6+ |
+| Node.js | 18+ |
+
+## Installation
+
+Make sure you have a working Frappe bench with ERPNext installed.
+
+**1. Get the app:**
 ```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch develop
-bench install-app no_sum_gl
+cd /home/frappe/frappe-bench
+bench get-app 
 ```
 
-### Contributing
-
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
-
+**2. Install on your site:**
 ```bash
-cd apps/no_sum_gl
-pre-commit install
+bench --site your-site-name install-app no_sum_gl
 ```
 
-Pre-commit is configured to use the following tools for checking and formatting your code:
+**3. Run migrations:**
+```bash
+bench --site your-site-name migrate
+```
 
-- ruff
-- eslint
-- prettier
-- pyupgrade
+**4. Restart bench:**
+```bash
+bench restart
+```
 
-### CI
+## Usage
 
-This app can use GitHub Actions for CI. The following workflows are configured:
+After installation, navigate to:
 
-- CI: Installs this app and runs unit tests on every push to `develop` branch.
-- Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
+**GL Report View**
 
+## Permissions
 
-### License
+## License
 
-mit
+MIT
