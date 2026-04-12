@@ -38,7 +38,7 @@ Make sure you have a working Frappe bench with ERPNext installed.
 **1. Get the app:**
 ```bash
 cd /home/frappe/frappe-bench
-bench get-app 
+bench get-app https://github.com/MouhabSs/no_sum_gl
 ```
 
 **2. Install on your site:**
