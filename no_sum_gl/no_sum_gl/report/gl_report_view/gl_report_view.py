@@ -89,7 +89,7 @@ def execute(filters=None):
     # Show Remarks — add column and select field only if checked
     if filters.get("show_remarks"):
         columns.append(
-            {"label": "Remarks", "fieldname": "remarks", "fieldtype": "Data", "width": 300}
+            {"label": "Remarks", "fieldname": "remarks", "fieldtype": "Data", "width": 150}
         )
         select_fields += ", gle.remarks"
 
@@ -101,3 +101,54 @@ def execute(filters=None):
     """.format(select_fields=select_fields, where_clause=where_clause), values, as_dict=True)
 
     return columns, data
+
+@frappe.whitelist()
+def get_print_data(filters):
+    if isinstance(filters, str):
+        import json
+        filters = json.loads(filters)
+
+    try:
+        columns, data = execute(filters)
+
+        company_doc = frappe.get_doc("Company", filters.get("company"))
+        
+        # Handle logo URL
+        logo_url = ""
+        if company_doc.company_logo:
+            logo_path = company_doc.company_logo
+            # If it's a relative path, construct the full URL
+            if not logo_path.startswith("http"):
+                logo_url = frappe.utils.get_url(logo_path)
+            else:
+                logo_url = logo_path
+
+        html = frappe.render_template(
+            "no_sum_gl/no_sum_gl/report/gl_report_view/gl_report_view.html",
+            {
+                "data": data,
+                "filters": filters,
+                "company": company_doc,
+                "logo": logo_url,
+                "from_date": filters.get("from_date"),
+                "to_date": filters.get("to_date"),
+                "party": filters.get("party", ""),
+                "party_type": filters.get("party_type", ""),
+                "account": filters.get("account", ""),
+                "show_remarks": filters.get("show_remarks"),
+                "currency": company_doc.default_currency or "EGP",
+                "print_date": frappe.utils.now_datetime().strftime("%d-%m-%Y %H:%M:%S")
+            }
+        )
+        
+        return {
+            "html": html,
+            "message": "success"
+        }
+    except Exception as e:
+        frappe.log_error(f"Error in get_print_data: {str(e)}", "GL Report View Print")
+        return {
+            "html": f"<h1>Error generating print</h1><p>{str(e)}</p>",
+            "message": "error",
+            "error": str(e)
+        }

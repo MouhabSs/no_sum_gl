@@ -71,5 +71,38 @@ frappe.query_reports["GL Report View"] = {
             fieldtype: "Check",
             default: 1
         }
-    ]
+    ],
+    onload: function(report) {
+        report.page.add_inner_button(__("Print Statement"), function() {
+            let filters = report.get_values();
+
+            if (!filters.company) {
+                frappe.msgprint(__("Please select a Company first"));
+                return;
+            }
+
+            frappe.call({
+                method: "no_sum_gl.report.gl_report_view.gl_report_view.get_print_data",
+                args: { filters: filters },
+                callback: function(r) {
+                    if (!r.message) {
+                        frappe.msgprint(__("Error: No response from server"));
+                        return;
+                    }
+                    
+                    let html = r.message.html || r.message;
+                    
+                    if (r.message.error) {
+                        frappe.msgprint(__("Error generating print: " + r.message.error));
+                        return;
+                    }
+                    
+                    let w = window.open();
+                    w.document.write(html);
+                    w.document.close();
+                    setTimeout(() => { w.print(); }, 1000);
+                }
+            });
+        });
+    }
 };

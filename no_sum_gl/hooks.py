@@ -8,6 +8,11 @@ app_license = "mit"
 # Apps
 # ------------------
 
+# Workspace shortcuts
+after_install = "no_sum_gl.setup.add_workspace_shortcut"
+after_migrate = ["no_sum_gl.setup.add_workspace_shortcut"]
+
+
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page

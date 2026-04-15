@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 11px;
+            color: #000;
+            padding: 30px;
+            background: white;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .logo img {
+            max-width: 120px;
+            max-height: 80px;
+            object-fit: contain;
+        }
+
+        .logo-placeholder {
+            width: 100px;
+            height: 70px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #999;
+        }
+
+        .signatures {
+            display: flex;
+            gap: 50px;
+            align-items: flex-end;
+        }
+
+        .sig-item {
+            text-align: center;
+            width: 130px;
+        }
+
+        .sig-line {
+            border-top: 1px solid #000;
+            padding-top: 6px;
+            font-size: 9px;
+            line-height: 1.6;
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+        }
+
+        .title-section h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .title-section .subtitle {
+            font-size: 12px;
+            color: #444;
+            margin-bottom: 4px;
+        }
+
+        .title-section .date-range {
+            font-size: 11px;
+            color: #444;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        thead tr { background-color: #e8e8e8; }
+
+        th {
+            border: 1px solid #999;
+            padding: 7px 10px;
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            font-size: 10px;
+            vertical-align: top;
+        }
+
+        .col-date  { width: 90px;  text-align: center; }
+        .col-acct  { width: 160px; }
+        .col-party { width: 120px; }
+        .col-vtype { width: 100px; }
+        .col-vno   { width: 150px; }
+        .col-amt   { width: 110px; text-align: right; font-family: monospace; direction: ltr; }
+        .col-cc    { width: 110px; }
+        .col-rem   { width: auto; }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 9px;
+            color: #666;
+        }
+        
+        .footer .signatures {
+            display: flex;
+            gap: 50px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+        
+        .footer .sig-item {
+            text-align: center;
+            width: 130px;
+        }
+        
+        .footer .sig-line {
+            border-top: 1px solid #000;
+            padding-top: 6px;
+            font-size: 9px;
+            line-height: 1.6;
+            direction: rtl;
+        }
+
+        @media print {
+            body { padding: 15px; }
+            @page { margin: 1cm; size: landscape; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            {% if logo %}
+                <img src="{{ logo }}" alt="Logo" style="max-width: 120px; max-height: 80px;">
+            {% else %}
+                <div class="logo-placeholder">LOGO</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Title -->
+    <div class="title-section">
+        <h2>General Ledger Detail View | دفتر الأستاذ التفصيلي</h2>
+        {% if filters.party_type and filters.party %}
+            <div class="subtitle">{{ filters.party_type }}: {{ filters.party }}</div>
+        {% endif %}
+        {% if filters.account %}
+            <div class="subtitle">Account | الحساب: {{ filters.account }}</div>
+        {% endif %}
+        <div class="date-range">{{ from_date }} to | إلى {{ to_date }}</div>
+    </div>
+
+    <!-- Table -->
+    <table>
+        <thead>
+            <tr>
+                <th class="col-date">Date<br>التاريخ</th>
+                <th class="col-acct">Account<br>الحساب</th>
+                <th class="col-party">Party<br>الطرف</th>
+                <th class="col-vtype">Voucher Type<br>نوع القيد</th>
+                <th class="col-vno">Voucher No<br>رقم القيد</th>
+                <th class="col-amt">Debit<br>مدين</th>
+                <th class="col-amt">Credit<br>دائن</th>
+                <th class="col-cc">Cost Center<br>مركز التكلفة</th>
+                {% if show_remarks %}
+                    <th class="col-rem">Remarks<br>البيان</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td class="col-date">{{ row.posting_date or "" }}</td>
+                <td class="col-acct">{{ row.account or "" }}</td>
+                <td class="col-party">{{ row.party or "" }}</td>
+                <td class="col-vtype">{{ row.voucher_type or "" }}</td>
+                <td class="col-vno">{{ row.voucher_no or "" }}</td>
+                <td class="col-amt">
+                    {{ currency }} {{ "{:,.2f}".format(row.debit or 0) }}
+                </td>
+                <td class="col-amt">
+                    {{ currency }} {{ "{:,.2f}".format(row.credit or 0) }}
+                </td>
+                <td class="col-cc">{{ row.cost_center or "" }}</td>
+                {% if show_remarks %}
+                    <td class="col-rem">{{ row.remarks or "" }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <div style="margin-bottom: 30px;">Printed On {{ print_date }}</div>
+        
+        <div class="signatures" style="margin-top: 50px;">
+            <div class="sig-item">
+                <div class="sig-line">General Manager<br>المدير العام</div>
+            </div>
+            <div class="sig-item">
+                <div class="sig-line">Financial Manager<br>المدير المالي</div>
+            </div>
+            <div class="sig-item">
+                <div class="sig-line">Accounts Manager<br>مدير الحسابات</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
