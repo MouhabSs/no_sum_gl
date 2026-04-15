@@ -1,7 +1,57 @@
-.DS_Store
+# Python
 *.pyc
-*.egg-info
+__pycache__/
+*.egg-info/
+dist/
+build/
+*.egg
+.Python
+env/
+venv/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE & Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
 *.swp
+*.swo
+*~
+.DS_Store
 tags
-node_modules
-__pycache__
+.tags
+
+# Node/NPM
+node_modules/
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# Frappe/ERPNext
+bench_*.txt
+.env
+.env.local
+.env.*.local
+private/files/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Misc
+*.log
+*.pot
+*.mo
+*.bak
+*.tmp
