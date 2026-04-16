@@ -16,28 +16,27 @@ This makes it impossible to audit individual line items as they were originally 
 Queries the `GL Entry` table directly without any grouping or aggregation, displaying every line item exactly as it was posted with full filtering capabilities.
 
 ### 2. **Statement of Account** - Printable Statement
-A professional, bilingual (English/Arabic) statement of account with company logo, signatures section, and complete audit trail.
-
+A professional, bilingual (English/Arabic) statement of account with company logo, signatures section, complete audit trail, and Company Logo
 ## Features
 
 ### GL Report View
-- ✅ Individual GL line items without summarization
-- ✅ Advanced filters: Company, Date Range, Account, Voucher No, Cost Center, Party Type, Party
-- ✅ Optional Remarks column
-- ✅ Accounting Dimensions support
-- ✅ Finance Book filtering
-- ✅ Invoice and Print functionality
+-  Individual GL line items without summarization
+-  Advanced filters: Company, Date Range, Account, Voucher No, Cost Center, Party Type, Party
+-  Optional Remarks column
+-  Accounting Dimensions support
+-  Finance Book filtering
+-  Invoice and Print functionality
 
 ### Statement of Account
-- ✅ Professional print-ready format (HTML/PDF)
-- ✅ Bilingual headers (English & Arabic)
-- ✅ Company logo display
-- ✅ Signature section in footer for approvals
-- ✅ Running balance calculation
-- ✅ Full GL entry details (Date, Account, Party, Voucher, Debit, Credit, Balance)
-- ✅ Optional remarks column
-- ✅ Print optimization with proper styling
-- ✅ Currency formatting with company default
+-   Professional print-ready format (HTML/PDF)
+-   Bilingual headers (English & Arabic)
+-   Company logo display
+-   Signature section in footer for approvals
+-   Running balance calculation
+-   Full GL entry details (Date, Account, Party, Voucher, Debit, Credit, Balance)
+-   Optional remarks column
+-   Print optimization with proper styling
+-   Currency formatting with company default
 
 ## Requirements
 
@@ -56,7 +55,7 @@ Make sure you have a working Frappe bench with ERPNext installed.
 ### 1. Get the app:
 ```bash
 cd /home/frappe/frappe-bench
-bench get-app https://github.com/yourusername/no_sum_gl.git
+bench get-app https://github.com/MouhabSs/no_sum_gl
 ```
 
 ### 2. Install on your site:
@@ -152,40 +151,9 @@ The reports are available to users with:
 - **Accounts Manager**
 - **Auditor**
 
-## Development
-
-### Project Structure
-```
-no_sum_gl/
-├── no_sum_gl/
-│   ├── report/
-│   │   ├── gl_report_view/
-│   │   │   ├── gl_report_view.py
-│   │   │   ├── gl_report_view.js
-│   │   │   ├── gl_report_view.json
-│   │   │   └── gl_report_view.html
-│   │   └── statement_of_account/
-│   ├── hooks.py
-│   ├── setup.py
-│   └── __init__.py
-├── .gitignore
-├── pyproject.toml
-└── README.md
-```
-
-### Contributing
-Contributions are welcome! Please ensure:
-- Code follows PEP 8 standards
-- All filters and features are tested
-- Documentation is updated
-
 ## License
 
 MIT License - See LICENSE file for details
-
-## Support
-
-For issues, questions, or feature requests, please create an issue on the project repository.
 
 ---
 

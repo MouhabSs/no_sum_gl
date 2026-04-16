@@ -86,6 +86,7 @@ def execute(filters=None):
         gle.cost_center
     """
 
+
     # Show Remarks — add column and select field only if checked
     if filters.get("show_remarks"):
         columns.append(
