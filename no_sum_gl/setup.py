@@ -3,6 +3,10 @@ import frappe
 def add_workspace_shortcut():
     workspace_name = "Accounting"
 
+    # Wait — report must exist before we can link to it
+    if not frappe.db.exists("Report", "GL Report View"):
+        return
+
     existing = frappe.db.exists(
         "Workspace Shortcut",
         {"label": "GL Report View", "parent": workspace_name}
